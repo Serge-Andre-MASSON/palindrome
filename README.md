@@ -1,51 +1,42 @@
+# Introduction
+
+The problem is to find the biggest palindrom $p$ with
+$$p = a_0\times a_1\times \dots \times a_{n-1}$$
+and
+$$a_i\in \llbracket m, M \rrbracket$$
+
+This repository will provide three solutions and for readability, we'll 
+<!-- present them using $m=11,\ M=25$ and $n=3$. -->
+
+For each solution this repository will provide, the idea is to iterate within the cartesian product $\llbracket m, M \rrbracket^n$.
+
+Before solving the actual problem with $m=100,\ M=999$ and $n=3$, we'll use $m=11,\ M=25$ and $n=3$ as an example.
+
+
+
 ```python
-from iterators import get_naive_iterator, get_pruned_iterator, get_almost_ordered_iterator, plot_iterator
-```
-
-
-```python
-
-
-
+from iterators import (
+    get_naive_iterator, 
+    get_pruned_iterator, 
+    get_ordered_iterator,
+    plot_iterator)
+    
 min_digit, max_digit, n_digits = 11, 25, 3
 
-naive_iterator = get_naive_iterator(min_digit, max_digit, n_digits)
+```
 
+# Brute force solution using a naive iterator
+
+This solution simply involve nested for loops within the cartesian product $\llbracket m, M \rrbracket^n$. It avoids duplicates by ordering each $(a, b, c)$ such as $a\geq b\geq c$.
+
+As we can see on the figure below, this iterator must be consumed entirely before return the biggest palindrome which will result in a big amount of time to compute the solution.
+
+
+```python
+naive_iterator = get_naive_iterator(min_digit, max_digit, n_digits)
 plot_iterator(
     naive_iterator,
-    title="Products path with almost ordered iterator")
-
-```
-
-
-    
-![png](README_files/README_1_0.png)
-    
-
-
-
-```python
-pruned_iterator = get_pruned_iterator(min_digit, max_digit)
-plot_iterator(
-    pruned_iterator,
-    title="Products path with smart iterator")
-
-```
-
-
-    
-![png](README_files/README_2_0.png)
-    
-
-
-
-```python
-ordered_iterator = get_almost_ordered_iterator(
-    min_digit, max_digit, n_digits)
-plot_iterator(
-    ordered_iterator,
-    title="Products path with almost ordered iterator")
-
+    title="Products path with naive iterator")
 
 ```
 
@@ -55,9 +46,59 @@ plot_iterator(
     
 
 
+# Brute Force solution with pruning
+
+The idea here is that we won't iterate threw $(a, b, c)$ if their product $abc$ is less than the last encountered palindrome. 
+This solution will be really faster but can't be used to find all the palindromes.
+
 
 ```python
-ordered_iterator = get_almost_ordered_iterator(
+pruned_iterator = get_pruned_iterator(min_digit, max_digit)
+plot_iterator(
+    pruned_iterator,
+    title="Products path with pruned iterator")
+
+```
+
+
+    
+![png](README_files/README_5_0.png)
+    
+
+
+# First match with a decreasing iterator
+
+The idea here is te iterate within $\llbracket m, M \rrbracket^n$ in a way such that the sequence of the $(a,b,c)$ is not ascending.
+To accomplish that, we consider the tree where each node $(a, b, c)$ has three children which are the combinations with the biggest product smaller than $abc$.
+
+We might then process a BFS against that tree and stop at the first palindrome encoutered but it will not be guaranteed to return the biggest one as a simple BFS will not previde a non ascending sequance of combinations.
+
+
+
+
+```python
+ordered_iterator = get_ordered_iterator(
+    min_digit, max_digit, n_digits, almost=True)
+plot_iterator(
+    ordered_iterator,
+    title="Products path with almost ordered iterator")
+
+
+```
+
+
+    
+![png](README_files/README_7_0.png)
+    
+
+
+To avoid this, we'll need compute a little bit ahead of time the next layer of the tree so we can merge it with the currently processed layer while preserving the non ascendinfg order.
+
+The great advantage of this iterator is that the first palindrome is the one.
+
+
+```python
+ordered_iterator = get_ordered_iterator(
     min_digit, max_digit, n_digits, almost=False)
 plot_iterator(
     ordered_iterator,
@@ -67,11 +108,43 @@ plot_iterator(
 
 
     
-![png](README_files/README_4_0.png)
+![png](README_files/README_9_0.png)
     
+
+
+# Performances
 
 
 
 ```python
+from palindrome import NaiveFinder, PrunedFinder, OrderedFinder
+from time import time
+import matplotlib.pyplot as plt
+```
+
+
+```python
+from time import perf_counter
+
+
+def perfs(finder):
+    t = perf_counter()
+    p = finder.find()
+    return p, perf_counter() - t
+
+
+min_digit, max_digit = 100, 999
+naive_finder = NaiveFinder(min_digit, max_digit)
+pruned_finder = PrunedFinder(min_digit, max_digit)
+ordered_finder = OrderedFinder(min_digit, max_digit)
+
+print("naive", *perfs(naive_finder))
+print("pruned", *perfs(pruned_finder))
+print("ordered :", *perfs(ordered_finder))
 
 ```
+
+    naive (967262769, 123.83732125100505)
+    pruned (967262769, 0.37509871399379335)
+    ordered : 967262769 0.0064202840003417805
+
