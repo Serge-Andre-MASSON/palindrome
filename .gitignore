@@ -1,0 +1,9 @@
+# virtual env
+.palindrome
+
+__pycache__
+.pytest_cache
+
+# Notebooks
+*.ipynb
+*.ipynb_checkpoints
