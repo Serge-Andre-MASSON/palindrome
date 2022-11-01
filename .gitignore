@@ -11,5 +11,5 @@ __pycache__
 *.ipynb
 *.ipynb_checkpoints
 
-# Markdown
-ipynb_to_md.txt
+# Local stuff
+local_stuff
