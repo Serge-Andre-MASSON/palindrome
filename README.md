@@ -1,22 +1,27 @@
 # Usage
-"raise NotImplementedError"
 
-# Introduction
+### Within a conda env
+```console
+$ conda create -n <env_name> python=3.10
+$ conda activate <env_name>
+$ pip install -r requirements.txt
+
+```
+### With docker
+"raise NotImplementedYetError"
+
+
+# The problem
 
 The problem is to find the biggest palindrom $p$ with
 $$p = a_0\times a_1\times \dots \times a_{n-1}$$
 and
 $$a_i\in [ m, M ]$$
 
-This repository will provide three solutions and for readability, we'll 
-<!-- present them using $m=11,\ M=25$ and $n=3$. -->
 
-For each solution this repository will provide, the idea is to iterate within the cartesian product $[ m, M ]^n$.
+For each solution , the idea is to iterate within the cartesian product $[ m, M ]^n$. An other solution might be to iterate over all palindromes between $a_{max}$ and $a_{min}$ and it will probably be implemented soon.
 
-Before solving the actual problem with $m=100,\ M=999$ and $n=3$, we'll use $m=11,\ M=25$ and $n=3$ as an example.
-
-
-An other solution might be to iterate over all palindromes between $a_{max}$ and $a_{min}$ and it will probably be implemented soon.
+Before solving the actual problem with $m=100,\ M=999$ and $n=3$, we'll use $m=11,\ M=25$ and $n=3$ for visualisation.
 
 
 
