@@ -1,4 +1,4 @@
-from combination import Combination
+from combinations import Combination
 
 
 def test_combination_product():
