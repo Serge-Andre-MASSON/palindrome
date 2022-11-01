@@ -1,9 +1,15 @@
 # virtual env
 .palindrome
 
+# Python stuff
 __pycache__
+
+# pytest
 .pytest_cache
 
 # Notebooks
 *.ipynb
 *.ipynb_checkpoints
+
+# Markdown
+ipynb_to_md.txt

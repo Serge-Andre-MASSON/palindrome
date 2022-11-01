@@ -1,16 +1,22 @@
+# Usage
+"raise NotImplementedError"
+
 # Introduction
 
 The problem is to find the biggest palindrom $p$ with
 $$p = a_0\times a_1\times \dots \times a_{n-1}$$
 and
-$$a_i\in \llbracket m, M \rrbracket$$
+$$a_i\in [ m, M ]$$
 
 This repository will provide three solutions and for readability, we'll 
 <!-- present them using $m=11,\ M=25$ and $n=3$. -->
 
-For each solution this repository will provide, the idea is to iterate within the cartesian product $\llbracket m, M \rrbracket^n$.
+For each solution this repository will provide, the idea is to iterate within the cartesian product $[ m, M ]^n$.
 
 Before solving the actual problem with $m=100,\ M=999$ and $n=3$, we'll use $m=11,\ M=25$ and $n=3$ as an example.
+
+
+An other solution might be to iterate over all palindromes between $a_{max}$ and $a_{min}$ and it will probably be implemented soon.
 
 
 
@@ -27,7 +33,7 @@ min_digit, max_digit, n_digits = 11, 25, 3
 
 # Brute force solution using a naive iterator
 
-This solution simply involve nested for loops within the cartesian product $\llbracket m, M \rrbracket^n$. It avoids duplicates by ordering each $(a, b, c)$ such as $a\geq b\geq c$.
+This solution simply involve nested for loops within the cartesian product $[ m, M ]^n$. It avoids duplicates by ordering each $(a, b, c)$ such as $a\geq b\geq c$.
 
 As we can see on the figure below, this iterator must be consumed entirely before return the biggest palindrome which will result in a big amount of time to compute the solution.
 
@@ -42,7 +48,7 @@ plot_iterator(
 
 
     
-![png](README_files/README_3_0.png)
+![png](README_files/README_4_0.png)
     
 
 
@@ -62,16 +68,17 @@ plot_iterator(
 
 
     
-![png](README_files/README_5_0.png)
+![png](README_files/README_6_0.png)
     
 
 
 # First match with a decreasing iterator
 
-The idea here is te iterate within $\llbracket m, M \rrbracket^n$ in a way such that the sequence of the $(a,b,c)$ is not ascending.
+The idea here is te iterate within $[ m, M ]^n$ in a way such that the sequence of the $(a,b,c)$ is decreasing.
+
 To accomplish that, we consider the tree where each node $(a, b, c)$ has three children which are the combinations with the biggest product smaller than $abc$.
 
-We might then process a BFS against that tree and stop at the first palindrome encoutered but it will not be guaranteed to return the biggest one as a simple BFS will not previde a non ascending sequance of combinations.
+We might then process Breadth First Search (BFS) against that tree and stop at the first palindrome encoutered. Actually it may not return the biggest one as a it will not provide a decreasing sequence of combinations.
 
 
 
@@ -88,13 +95,13 @@ plot_iterator(
 
 
     
-![png](README_files/README_7_0.png)
+![png](README_files/README_8_0.png)
     
 
 
-To avoid this, we'll need compute a little bit ahead of time the next layer of the tree so we can merge it with the currently processed layer while preserving the non ascendinfg order.
+To avoid this, we'll need to compute a little bit ahead of time the next layer of the tree and merge it with the currently processed layer while preserving the decreasing order.
 
-The great advantage of this iterator is that the first palindrome is the one.
+The great advantage of this iterator, aside his speed of execution, is that the first palindrome is the one we looking for.
 
 
 ```python
@@ -108,7 +115,7 @@ plot_iterator(
 
 
     
-![png](README_files/README_9_0.png)
+![png](README_files/README_10_0.png)
     
 
 
