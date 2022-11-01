@@ -143,16 +143,12 @@ plot_iterator(
 
 
 ```python
-from palindrome import NaiveFinder, PrunedFinder, OrderedFinder
-from time import time
-import matplotlib.pyplot as plt
+from finders import NaiveFinder, PrunedFinder, OrderedFinder
+from time import perf_counter
 ```
 
 
 ```python
-from time import perf_counter
-
-
 def perfs(finder):
     t = perf_counter()
     p = finder.find()
