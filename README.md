@@ -21,11 +21,30 @@ An other solution might be to iterate over all palindromes between $a_{max}$ and
 
 
 ```python
+import matplotlib.pyplot as plt
+from combinations import Combination
 from iterators import (
     get_naive_iterator, 
     get_pruned_iterator, 
-    get_ordered_iterator,
-    plot_iterator)
+    get_ordered_iterator)
+
+def plot_iterator(iterator, title=""):
+    products = []
+    palindromes_x = []
+    palindromes_y = []
+
+    for i, combination in enumerate(iterator):
+        combination = Combination(combination)
+        if combination.is_palindrome():
+            palindromes_x.append(i)
+            palindromes_y.append(combination.product)
+        products.append(combination.product)
+
+    plt.plot(products, label="Products")
+    plt.scatter(palindromes_x, palindromes_y, c='r',
+                marker="*", label="Palindromes")
+    plt.title(title)
+    plt.legend()
     
 min_digit, max_digit, n_digits = 11, 25, 3
 
